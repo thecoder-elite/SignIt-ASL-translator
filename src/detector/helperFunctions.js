@@ -1,31 +1,53 @@
-export function removeElements(landmarks, elements) {
-    for (const element of elements) {
-        delete landmarks[element];
-    }
-}
 
-export function removeLandmarks(results) {
-    if (results.poseLandmarks) {
-        removeElements(
-            results.poseLandmarks,
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 16, 17, 18, 19, 20, 21, 22]);
-    }
-}
+import * as tf from '@tensorflow/tfjs';
 
-export function connect(ctx,connectors){
-    const canvas = ctx.canvas;
-    for (const connector of connectors) {
-        const from = connector[0];
-        const to = connector[1];
-        if (from && to) {
-            if (from.visibility && to.visibility &&
-                (from.visibility < 0.1 || to.visibility < 0.1)) {
-                continue;
+let sequence = [];
+
+export const onResults = (results, model) => {
+    if (model !== null) {
+        try {
+            let pose = new Array(33 * 4).fill(0), face = new Array(468 * 3).fill(0), lh = new Array(21 * 3).fill(0), rh = new Array(21 * 3).fill(0);
+            console.log("getting frame")
+            if (results.poseLandmarks) {
+                let arr = [];
+                for (let res of results.poseLandmarks) {
+                    arr.push(...[res.x, res.y, res.z, res.visibility])
+                }
+                pose = arr;
             }
-            ctx.beginPath();
-            ctx.moveTo(from.x * canvas.width, from.y * canvas.height);
-            ctx.lineTo(to.x * canvas.width, to.y * canvas.height);
-            ctx.stroke();
+            if (results.faceLandmarks) {
+                let arr = [];
+                for (let res of results.faceLandmarks) {
+                    arr.push(...[res.x, res.y, res.z])
+                }
+                face = arr;
+            }
+            if (results.leftHandLandmarks) {
+                let arr = [];
+                for (let res of results.leftHandLandmarks) {
+                    arr.push(...[res.x, res.y, res.z])
+                }
+                lh = arr;
+            }
+            if (results.rightHandLandmarks) {
+                let arr = [];
+                for (let res of results.rightHandLandmarks) {
+                    arr.push(...[res.x, res.y, res.z])
+                }
+                rh = arr;
+            }
+            sequence.push([...pose, ...face, ...lh, ...rh])
+            if (sequence.length === 30) {
+                console.log(sequence)
+                let new_tensor = tf.tensor2d(sequence)
+                console.log(new_tensor.shape, tf.expandDims(new_tensor, 0).shape)
+                console.log(model.predict(tf.expandDims(new_tensor, 0)).print())
+                sequence = [];
+            }
+        }
+        catch (err) {
+            sequence = [];
+            console.log(err)
         }
     }
 }
