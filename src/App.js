@@ -7,6 +7,7 @@ function App() {
       <Detector />
     </div>
   )
+
 }
 
 export default App;

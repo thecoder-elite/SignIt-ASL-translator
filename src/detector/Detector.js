@@ -11,8 +11,6 @@ function Detector() {
   const videoElementRef = useRef();
   const [holisticModel, setHolisticModel] = useState(null);
 
-
-
   useEffect(() => {
     // Start the camera using mediapipe camera utility
     if (typeof videoElementRef.current !== "undefined" && videoElementRef.current !== null && holisticModel !== null) {
