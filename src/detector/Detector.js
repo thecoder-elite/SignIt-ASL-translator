@@ -28,6 +28,7 @@ function Detector() {
 
   useEffect(() => {
     // load our custom model and set it
+    const speechSynthesisUtterance = new SpeechSynthesisUtterance();
     tf.loadLayersModel('jsonmodel/model.json')
       .then(fetched_model => {
         console.log("fetched custom model")
@@ -39,7 +40,7 @@ function Detector() {
           }
         })
         holistic.setOptions({ minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 })
-        holistic.onResults((results) => onResults(results, fetched_model));
+        holistic.onResults((results) => onResults(results, fetched_model, speechSynthesisUtterance));
         holistic.initialize()
           .then(res => {
             console.log("Initialized Mp holistic model")
