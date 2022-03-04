@@ -1,17 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import * as mpHolistic from "@mediapipe/holistic";
 import * as tf from '@tensorflow/tfjs';
-import { CircularProgress } from "@mui/material";
 import { Camera } from '@mediapipe/camera_utils';
 import { onResults } from "./helperFunctions";
+import { Typography } from "@mui/material";
+import LoadingComponent from './LoadingComponent';
 
 function Detector() {
 
-  const [showLoadingSpinner, setShowLoadingSpinner] = useState(true)
+  const [loadingStates, setLoadingStates] = useState(0)
   const videoElementRef = useRef();
   const [holisticModel, setHolisticModel] = useState(null);
 
-  useEffect(() => {
+  const initCamera = useCallback(() => {
     // Start the camera using mediapipe camera utility
     if (typeof videoElementRef.current !== "undefined" && videoElementRef.current !== null && holisticModel !== null) {
       const camera = new Camera(videoElementRef.current, {
@@ -26,12 +27,14 @@ function Detector() {
     // --------------------------------------------------
   }, [videoElementRef, holisticModel])
 
+  console.log(initCamera)
+
   useEffect(() => {
     // load our custom model and set it
     const speechSynthesisUtterance = new SpeechSynthesisUtterance();
     tf.loadLayersModel('jsonmodel/model.json')
       .then(fetched_model => {
-        console.log("fetched custom model")
+        setLoadingStates(1)
         // initialize the holistic model
         const holistic = new mpHolistic.Holistic({
           locateFile: (file) => {
@@ -43,8 +46,7 @@ function Detector() {
         holistic.onResults((results) => onResults(results, fetched_model, speechSynthesisUtterance));
         holistic.initialize()
           .then(res => {
-            console.log("Initialized Mp holistic model")
-            setShowLoadingSpinner(false)
+            setLoadingStates(2)
             setHolisticModel(holistic)
           })
         // -----------------------------
@@ -55,20 +57,15 @@ function Detector() {
     // ------------------------------------------
   }, [])
 
-  if (showLoadingSpinner)
+  if (loadingStates < 2)
     return (
-      <div className="loading">
-        <CircularProgress />
-      </div>
+      <LoadingComponent loadingStates={loadingStates} />
     )
   else
     return (
-      <div className="App">
-        <div className="container">
-          <p >Webcam Input</p>
-          <video ref={videoElementRef} ></video>
-        </div>
-
+      <div className="container">
+        <Typography >Webcam Input</Typography>
+        <video ref={videoElementRef} ></video>
       </div>
     )
 }

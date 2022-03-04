@@ -6,21 +6,21 @@ const cardContent = [{
     header: "Lorem ipsum dolor",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
     showButton: false,
-    imgURL:"/res/onBoardingImage1.png"
+    imgURL: "/res/onBoardingImage1.png"
 },
 {
     id: "02",
     header: "Lorem ipsum dolor",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
     showButton: false,
-    imgURL:"/res/onBoardingImage1.png"
+    imgURL: "/res/onBoardingImage1.png"
 },
 {
     id: "03",
     header: "Lorem ipsum dolor",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
     showButton: true,
-    imgURL:"/res/onBoardingImage1.png"
+    imgURL: "/res/onBoardingImage2.png"
 }]
 
 export default function OnBoardingScreenHandler(props) {
@@ -28,14 +28,16 @@ export default function OnBoardingScreenHandler(props) {
         <TransitionGroup style={{ height: "100%" }}>
             <CSSTransition
                 timeout={1000}
-                classNames="fade"
+                classNames="slide"
                 key={cardContent[props.activeStep].id}
             >
                 <OnBoardingScreenCard
+                    handleNext={props.handleNext}
+                    activeStep={props.activeStep}
+                    handleSkip={props.handleSkip}
                     header={cardContent[props.activeStep].header}
                     content={cardContent[props.activeStep].content}
                     showButton={cardContent[props.activeStep].showButton}
-                    handleSkip={props.handleSkip}
                     imgURL={cardContent[props.activeStep].imgURL}
                 />
             </CSSTransition>
