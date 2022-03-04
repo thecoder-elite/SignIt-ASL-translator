@@ -4,6 +4,7 @@ import { getCookie } from "./helperFunctions";
 import OnBoardingScreen from "./onBoardingScreen/OnBoardingScreen";
 import { theme } from "./Theme";
 import { ThemeProvider } from '@mui/material/styles';
+import './onBoardingScreen/transitionStyles.css';
 
 const stepColors = {
   0: "#4abdac",
