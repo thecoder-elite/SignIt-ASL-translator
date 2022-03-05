@@ -2,6 +2,7 @@ import { LoadingDiv } from "./detectorStyles";
 import { Typography, Box, CircularProgress } from "@mui/material";
 
 export default function LoadingComponent(props) {
+
     return (
         <LoadingDiv >
             <div>

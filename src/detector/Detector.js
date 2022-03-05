@@ -3,7 +3,6 @@ import * as mpHolistic from "@mediapipe/holistic";
 import * as tf from '@tensorflow/tfjs';
 import { Camera } from '@mediapipe/camera_utils';
 import { onResults } from "./helperFunctions";
-import { Typography } from "@mui/material";
 import LoadingComponent from './LoadingComponent';
 
 function Detector() {
@@ -34,7 +33,7 @@ function Detector() {
     const speechSynthesisUtterance = new SpeechSynthesisUtterance();
     tf.loadLayersModel('jsonmodel/model.json')
       .then(fetched_model => {
-        setLoadingStates(1)
+        setLoadingStates(prev => prev + 1)
         // initialize the holistic model
         const holistic = new mpHolistic.Holistic({
           locateFile: (file) => {
@@ -46,7 +45,7 @@ function Detector() {
         holistic.onResults((results) => onResults(results, fetched_model, speechSynthesisUtterance));
         holistic.initialize()
           .then(res => {
-            setLoadingStates(2)
+            setLoadingStates(prev => prev + 1)
             setHolisticModel(holistic)
           })
         // -----------------------------
@@ -63,8 +62,7 @@ function Detector() {
     )
   else
     return (
-      <div className="container">
-        <Typography >Webcam Input</Typography>
+      <div style={{ width: "100%", background: "linear-gradient(-25deg, #fdcb6c 50%, #7d8dc1 50%)" }}>
         <video ref={videoElementRef} ></video>
       </div>
     )

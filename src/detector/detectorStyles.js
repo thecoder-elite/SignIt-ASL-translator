@@ -6,7 +6,6 @@ export const LoadingDiv = styled(Box)({
         background: "transparent",
         width: "100%",
         height: "100%",
-        zIndex: 999,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
