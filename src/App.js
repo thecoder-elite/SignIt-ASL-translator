@@ -35,7 +35,7 @@ function App() {
   return (
 
     <ThemeProvider theme={theme}>
-      <div className="App" style={{ display: "flex", justifyContent: "center", backgroundColor: showOnboardingScreen ? stepColors[activeStep] : "#dfdce3", height: "100vh", width: "100%" }}>
+      <div className="App" style={{ display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: showOnboardingScreen ? stepColors[activeStep] : "white", height: "100vh", width: "100%" }}>
         {
           showOnboardingScreen ?
             <OnBoardingScreen

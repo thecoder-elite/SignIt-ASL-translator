@@ -6,7 +6,7 @@ const cardContent = [{
     header: "Lorem ipsum dolor",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
     showButton: false,
-    imgURL: "/res/onBoardingImage1.png"
+    imgURL: "/logo512.png"
 },
 {
     id: "02",

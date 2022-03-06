@@ -54,6 +54,65 @@ export const LoadingDiv = styled(Box)({
             transform: "translateY(30px)",
             opacity: 1
         }
+    }
+})
 
+export const DetectorContainer = styled("div")({
+    "&": {
+        width: "100%",
+        background: "linear-gradient(-25deg, #fdcb6c 50%, #7d8dc1 50%)",
+        animation: "detector_bg 0.5s ease-in forwards",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column"
+    },
+    "@keyframes detector_bg": {
+        "0%": {
+            height: 0,
+        },
+        "100%": {
+            height: "100%",
+        },
+    },
+    "& .videoContainer": {
+        border: "5px solid white",
+        borderRadius: "50%",
+        backgroundColor: "white",
+        animation: "detector_container 1s ease-in forwards",
+        animationDelay: "1s",
+        visibility: "hidden",
+    },
+    "@keyframes detector_container": {
+        "0%": {
+            visibility: "visible",
+            height: 0,
+            width: 0,
+        },
+        "100%": {
+            visibility: "visible",
+            width: "min(500px, 90vw)",
+            height: "min(500px, 90vw)",
+        },
+    },
+    "& .navbar": {
+        position: "absolute",
+        top: 20,
+        left: 40,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    "& .buttonsContainer": {
+        backgroundColor: "white",
+        marginTop: "50px",
+        width: "max-content",
+        padding: "0 20px",
+        borderRadius: "30px",
+        justifyContent: "center",
+        alignItems: "center",
+        display: "grid",
+        gridTemplateColumns: "auto auto auto",
+        gridColumnGap: "10px"
     }
 })

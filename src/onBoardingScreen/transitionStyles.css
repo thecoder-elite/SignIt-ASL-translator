@@ -1,3 +1,7 @@
+body {
+  margin: 0;
+}
+
 /* appear - on page load */
 .fade-appear {
   opacity: 0;
@@ -17,23 +21,26 @@
   transform: scale(1) translatex(250px);
   z-index: 1;
 }
+
 .slide-enter.slide-enter-active {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    transition: opacity 1000ms linear 0ms, transform 1000ms ease-in-out 0ms;
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: opacity 1000ms linear 0ms, transform 1000ms ease-in-out 0ms;
 }
 
 /* slide exit */
 .slide-exit {
-    opacity: 1;
-    /* transform: scale(1) translateY(0); */
-    
+  opacity: 1;
+  /* transform: scale(1) translateY(0); */
+
 }
+
 .slide-exit.slide-exit-active {
-    opacity: 0;
-    /* transform: scale(0.97) translateY(5px); */
-    transition: opacity 0ms linear,
+  opacity: 0;
+  /* transform: scale(0.97) translateY(5px); */
+  transition: opacity 0ms linear,
 }
+
 .slide-exit-done {
   opacity: 0;
 }

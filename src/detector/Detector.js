@@ -1,32 +1,18 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import * as mpHolistic from "@mediapipe/holistic";
 import * as tf from '@tensorflow/tfjs';
-import { Camera } from '@mediapipe/camera_utils';
 import { onResults } from "./helperFunctions";
 import LoadingComponent from './LoadingComponent';
+import VideoContainer from "./VideoContainer";
+import { DetectorContainer } from "./detectorStyles";
+import { IconButton, Avatar, Tooltip } from "@mui/material";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 function Detector() {
 
   const [loadingStates, setLoadingStates] = useState(0)
-  const videoElementRef = useRef();
   const [holisticModel, setHolisticModel] = useState(null);
-
-  const initCamera = useCallback(() => {
-    // Start the camera using mediapipe camera utility
-    if (typeof videoElementRef.current !== "undefined" && videoElementRef.current !== null && holisticModel !== null) {
-      const camera = new Camera(videoElementRef.current, {
-        onFrame: async () => {
-          await holisticModel.send({ image: videoElementRef.current });
-        },
-        width: 480,
-        height: 480
-      });
-      camera.start();
-    }
-    // --------------------------------------------------
-  }, [videoElementRef, holisticModel])
-
-  console.log(initCamera)
 
   useEffect(() => {
     // load our custom model and set it
@@ -62,9 +48,22 @@ function Detector() {
     )
   else
     return (
-      <div style={{ width: "100%", background: "linear-gradient(-25deg, #fdcb6c 50%, #7d8dc1 50%)" }}>
-        <video ref={videoElementRef} ></video>
-      </div>
+      <DetectorContainer>
+        {/* <div className="navbar">
+          <img src="/logo512.png" alt="logo" height="50px" width="50px" />
+          <Typography component="h4" style={{color:"white", fontSize:"1.5rem"}}>Sign-it ASL Translator</Typography> 
+        </div> */}
+        <VideoContainer holisticModel={holisticModel} />
+        <div class="buttonsContainer">
+          <Tooltip title="Play">
+            <IconButton color="primary" variant="outlined"  ><PlayArrowIcon sx={{ height: "40px", width: "40px" }} /></IconButton>
+          </Tooltip>
+          <Avatar src="/logo512.png" sx={{ height: "100px", width: "100px" }} />
+          <Tooltip title="Upload File">
+            <IconButton color="primary" variant="outlined"  ><UploadFileIcon sx={{ height: "40px", width: "40px" }} /></IconButton>
+          </Tooltip>
+        </div>
+      </DetectorContainer>
     )
 }
 
