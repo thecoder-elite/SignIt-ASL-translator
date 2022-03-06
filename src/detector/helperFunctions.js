@@ -2,6 +2,8 @@
 import * as tf from '@tensorflow/tfjs';
 
 let sequence = [];
+let sentence = [];
+let prevWord = "";
 const actions = ['hello', 'thanks'];
 
 export const onResults = (results, model, speechSynthesisUtterance) => {
@@ -43,8 +45,13 @@ export const onResults = (results, model, speechSynthesisUtterance) => {
                 let model_result = model.predict(tf.expandDims(new_tensor, 0))
                 model_result.array().then(res => {
                     let prediction = actions[res[0].indexOf(Math.max(...res[0]))];
-                    speechSynthesisUtterance.text = prediction;
-                    window.speechSynthesis.speak(speechSynthesisUtterance);
+                    console.log(sentence, prevWord, prediction)
+                    if (prediction !== prevWord) {
+                        speechSynthesisUtterance.text = prediction;
+                        window.speechSynthesis.speak(speechSynthesisUtterance);
+                        sentence.push(prediction);
+                    }
+                    prevWord = prediction;
                 })
                 sequence = [];
             }
@@ -55,3 +62,6 @@ export const onResults = (results, model, speechSynthesisUtterance) => {
         }
     }
 }
+
+
+export const resetSentence = () => sentence = [];

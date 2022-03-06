@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as mpHolistic from "@mediapipe/holistic";
 import * as tf from '@tensorflow/tfjs';
 import { onResults } from "./helperFunctions";
 import LoadingComponent from './LoadingComponent';
-import VideoContainer from "./VideoContainer";
 import { DetectorContainer } from "./detectorStyles";
-import { IconButton, Avatar, Tooltip } from "@mui/material";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { IconButton, Avatar, Tooltip, Paper, CircularProgress, Typography } from "@mui/material";
+import StopCircleIcon from '@mui/icons-material/StopCircle';
+import { Camera } from '@mediapipe/camera_utils';
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 
 function Detector() {
 
   const [loadingStates, setLoadingStates] = useState(0)
   const [holisticModel, setHolisticModel] = useState(null);
+  const [camera, setCamera] = useState(null)
+  const [isVideoOn, setIsVideoOn] = useState(0);
+  const videoElementRef = useRef();
 
   useEffect(() => {
     // load our custom model and set it
@@ -42,6 +45,43 @@ function Detector() {
     // ------------------------------------------
   }, [])
 
+  useEffect(() => {
+    // Start the camera using mediapipe camera utility
+    if (typeof videoElementRef.current !== "undefined" && videoElementRef.current !== null && holisticModel !== null) {
+      const camera = new Camera(videoElementRef.current, {
+        onFrame: async () => {
+          await holisticModel.send({ image: videoElementRef.current });
+        },
+        width: 480,
+        height: 480
+      });
+      setCamera(camera)
+    }
+    // --------------------------------------------------
+  }, [videoElementRef, holisticModel])
+
+  const initCamera = () => {
+    // resetSentence();
+    camera.start()
+      .then(res => setIsVideoOn(1))
+  }
+
+  const stopVideo = () => {
+    camera.stop()
+      .then(res => setIsVideoOn(0))
+  }
+
+  const toggleVideo = () => {
+    if (isVideoOn === 0) {
+      setIsVideoOn(-1)
+      initCamera();
+    }
+    else {
+      setIsVideoOn(-1)
+      stopVideo();
+    }
+  }
+
   if (loadingStates < 2)
     return (
       <LoadingComponent loadingStates={loadingStates} />
@@ -49,19 +89,35 @@ function Detector() {
   else
     return (
       <DetectorContainer>
-        {/* <div className="navbar">
-          <img src="/logo512.png" alt="logo" height="50px" width="50px" />
-          <Typography component="h4" style={{color:"white", fontSize:"1.5rem"}}>Sign-it ASL Translator</Typography> 
-        </div> */}
-        <VideoContainer holisticModel={holisticModel} />
-        <div class="buttonsContainer">
-          <Tooltip title="Play">
-            <IconButton color="primary" variant="outlined"  ><PlayArrowIcon sx={{ height: "40px", width: "40px" }} /></IconButton>
-          </Tooltip>
+        <Paper elevation={3} className="videoContainer">
+          <video ref={videoElementRef} ></video>
+          {
+            isVideoOn === 0 && <div className="instructions">
+              <Typography component="h2" textAlign="center">Press <PlayCircleFilledIcon /> to start the camera!</Typography>
+              <Typography component="h2" textAlign="center">OR</Typography>
+              <Typography component="h2" textAlign="center">Upload a file to get started!</Typography>
+            </div>
+          }
+        </Paper>
+        <div className="buttonsContainer">
+          {
+            isVideoOn === -1 ?
+              <CircularProgress />
+              :
+              isVideoOn === 1 ?
+                <Tooltip title="Stop">
+                  <IconButton color="primary" variant="outlined" onClick={toggleVideo}  ><StopCircleIcon sx={{ height: "40px", width: "40px" }} /></IconButton>
+                </Tooltip>
+                :
+                <Tooltip title="Play">
+                  <IconButton color="primary" variant="outlined" onClick={toggleVideo}  ><PlayCircleFilledIcon sx={{ height: "40px", width: "40px" }} /></IconButton>
+                </Tooltip>
+          }
           <Avatar src="/logo512.png" sx={{ height: "100px", width: "100px" }} />
-          <Tooltip title="Upload File">
+          <input type="file" style={{ width: "90px" }} onClick={() => alert("Feature is currently under development!")} disabled={isVideoOn !== 0} />
+          {/* <Tooltip title="Upload File">
             <IconButton color="primary" variant="outlined"  ><UploadFileIcon sx={{ height: "40px", width: "40px" }} /></IconButton>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       </DetectorContainer>
     )

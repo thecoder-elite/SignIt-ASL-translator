@@ -82,17 +82,28 @@ export const DetectorContainer = styled("div")({
         animation: "detector_container 1s ease-in forwards",
         animationDelay: "1s",
         visibility: "hidden",
+        width: "min(500px, 90vw)",
+        height: "min(500px, 90vw)",
+    },
+    "& .videoContainer video": {
+        height: "100%",
+        width: "100%",
+        borderRadius: "50%",
+    },
+    "& .videoContainer .instructions": {
+        position: "relative",
+        bottom: "60%",
+        color: "#101335",
+        left: "0",
     },
     "@keyframes detector_container": {
         "0%": {
             visibility: "visible",
-            height: 0,
-            width: 0,
+            opacity: 0
         },
         "100%": {
             visibility: "visible",
-            width: "min(500px, 90vw)",
-            height: "min(500px, 90vw)",
+            opacity: 1
         },
     },
     "& .navbar": {
@@ -113,6 +124,9 @@ export const DetectorContainer = styled("div")({
         alignItems: "center",
         display: "grid",
         gridTemplateColumns: "auto auto auto",
-        gridColumnGap: "10px"
+        gridColumnGap: "10px",
+        visibility: "hidden",
+        animation: "detector_container 1s ease-in forwards",
+        animationDelay: "1s",
     }
 })
