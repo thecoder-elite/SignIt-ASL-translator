@@ -1,7 +1,4 @@
-import {
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 
 export default function VideoContainer(props) {
@@ -12,12 +9,6 @@ export default function VideoContainer(props) {
         <div className="instructions">
           <Typography component="h2" textAlign="center">
             Press <PlayCircleFilledIcon /> to start the camera!
-          </Typography>
-          <Typography component="h2" textAlign="center">
-            OR
-          </Typography>
-          <Typography component="h2" textAlign="center">
-            Upload a file to get started!
           </Typography>
         </div>
       )}

@@ -116,7 +116,7 @@ export const DetectorContainer = styled("div")({
   },
   "& .buttonsContainer": {
     backgroundColor: "white",
-    marginTop: "50px",
+    marginTop: "10px",
     width: "max-content",
     padding: "0 20px",
     borderRadius: "20px",

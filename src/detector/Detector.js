@@ -7,6 +7,7 @@ import { DetectorContainer } from "./detectorStyles";
 import { Camera } from "@mediapipe/camera_utils";
 import VideoContainer from "./VideoContainer";
 import ButtonContainer from "./ButtonContainer";
+import { Typography } from "@mui/material";
 
 function Detector() {
   const [loadingStates, setLoadingStates] = useState(0);
@@ -14,6 +15,7 @@ function Detector() {
   const [camera, setCamera] = useState(null);
   const [isVideoOn, setIsVideoOn] = useState(0);
   const videoElementRef = useRef();
+  const textAreaRef = useRef();
 
   useEffect(() => {
     // load our custom model and set it
@@ -35,7 +37,12 @@ function Detector() {
           minTrackingConfidence: 0.5,
         });
         holistic.onResults((results) =>
-          onResults(results, fetched_model, speechSynthesisUtterance)
+          onResults(
+            results,
+            fetched_model,
+            speechSynthesisUtterance,
+            textAreaRef
+          )
         );
         holistic.initialize().then((res) => {
           setLoadingStates((prev) => prev + 1);
@@ -60,7 +67,7 @@ function Detector() {
         onFrame: async () => {
           await holisticModel.send({ image: videoElementRef.current });
         },
-        width: 480,
+        width: 640,
         height: 480,
       });
       setCamera(camera);
@@ -94,7 +101,11 @@ function Detector() {
         <VideoContainer
           videoElementRef={videoElementRef}
           isVideoOn={isVideoOn}
+          textAreaRef={textAreaRef}
         />
+        <div style={{ height: "max-content", margin: "20px 0" }}>
+          <Typography ref={textAreaRef} sx={{ fontSize: "25px" }}></Typography>
+        </div>
         <ButtonContainer isVideoOn={isVideoOn} toggleVideo={toggleVideo} />
       </DetectorContainer>
     );

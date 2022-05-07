@@ -28,7 +28,7 @@ export default function OnBoardingScreenCard(props) {
                 <img src={props.imgURL} alt="onboarding user" style={{ height: "auto", width: "min(100%, 400px)" }} />
             </div>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center" }}>
-                <Typography component="h1" style={{ color: "white", margin: "10px 0", textAlign: "center" }}>{props.header}</Typography>
+                <Typography variant="h3" style={{ color: "white", margin: "10px 0", textAlign: "center" }}>{props.header}</Typography>
                 <Typography style={{ textAlign: "center", color: "white", width: "100%", opacity: "0.7", margin: "10px 0" }}>{props.content}</Typography>
                 {
                     props.showButton &&
