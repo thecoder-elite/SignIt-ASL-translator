@@ -34,7 +34,7 @@ function Detector() {
         });
         holistic.setOptions({
           minDetectionConfidence: 0.5,
-          minTrackingConfidence: 0.5,
+          minTrackingConfidence: 0.8,
         });
         holistic.onResults((results) =>
           onResults(
